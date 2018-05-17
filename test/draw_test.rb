@@ -7,4 +7,8 @@ class GameTest < Minitest::Test
     draw = Draw.new
     assert_instance_of Draw, draw
   end
+
+  def test_can_draw_board
+    # mock this in future implementation
+  end
 end
