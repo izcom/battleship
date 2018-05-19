@@ -1,11 +1,7 @@
-# super class to ai and human
+# super class to computer and human
 
 class Player
-
   def initialize
-    
+    @ship_count = 0
   end
-
-
-
 end
