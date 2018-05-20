@@ -6,7 +6,14 @@ class BoardTest < Minitest::Test
   def test_board_instance_can_exist
     board = Board.new
     assert_instance_of Board, board
-    board.draw_board
+  end
+
+  def test_can_draw_board
+    board = Board.new
+    result = board.draw_board
+    expected = ''
+
+    # assert_equal expected, result
   end
 
   def test_if_ships_overlap; end
