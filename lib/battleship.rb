@@ -10,7 +10,7 @@ elsif user_input == ['i' || 'instructions']
   game.print_instructions
 elsif user_input == ['q' || 'quit']
   puts `clear`
-  puts "Goodbye."
+  puts 'Goodbye.'
   sleep(1)
   exit
 else

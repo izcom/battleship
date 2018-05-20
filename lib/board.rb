@@ -2,20 +2,19 @@ require 'pry'
 require './lib/space'
 
 class Board
-
   def initialize
-    @rows = [[],[],[],[]]
+    @rows = []
     @rows = assign_hash_to_board
   end
 
-  # creates hashes with nils A[1] => nil, A[2] => nil...B1 => nil...etc
-  def assign_hash_to_board
-    @rows.each.with_index(offset = 1) do |index|
-      @rows = [
-        { :A => {:A[index] => Space.new},
-          :B => {:B[index] => Space.new},
-          :C => {:C[index] => Space.new},
-          :D => {:D[index] => Space.new} }]
+  # creates hashes with space instances
+  def assign_hashes_to_board
+    4.times
+      4.times.with_index do |index|
+        @rows << { 'A' + (index + 1).to_s => Space.new }
+        @rows << { 'B' + (index + 1).to_s => Space.new }
+        @rows << { 'C' + (index + 1).to_s => Space.new }
+        @rows << { 'D' + (index + 1).to_s => Space.new }
     end
   end
 
