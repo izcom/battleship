@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/game'
-require 'expect'
+require './lib/board'
 
 class GameTest < Minitest::Test
   def test_game_instance_can_exist
@@ -15,14 +15,20 @@ class GameTest < Minitest::Test
     # mock this in future implementation
   end
 
-  def test_return_available_spaces_method
-    ship_one = Ship.new(2)
+  def test_remove_unavailable_spaces_method
     board = Board.new
+    modded_board = board.dup
     game = Game.new
+    assert_equal board.row.count, 16 # starting length
 
-    result = game.return_available_spaces(board)
-    expected =
-
+    board.row[0]['A1'].contains_ship = true # A1 hash
+    board = game.remove_unavailable_spaces(board) # modifies length
+    result = board.row.count
+    expected = 15
     assert_equal expected, result
+  end
+
+  def test_place_computer_ships
+    # do this next
   end
 end

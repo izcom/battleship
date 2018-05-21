@@ -48,12 +48,13 @@ class Game
     arr << return_available_spaces
     rand_int = rand(1..4)
     3.times do
-    @computer_board.ship_one.starting_point = @computer_board.row[rand_int]
-    arr << return_available_spaces
-    @computer_board.ship_two.starting_point = @computer_board.row[rand_int]
-    arr << return_available_spaces
-    @computer_board.ship_three.starting_point = @computer_board.row[rand_int]
-  end
+      @computer_board.ship_one.starting_point = @computer_board.row[rand_int]
+      arr << return_available_spaces
+      @computer_board.ship_two.starting_point = @computer_board.row[rand_int]
+      arr << return_available_spaces
+      @computer_board.ship_three.starting_point = @computer_board.row[rand_int]
+      end
+    end
 
   # def place_person_ships(ships)
   #   arr = []
@@ -61,16 +62,12 @@ class Game
   # end
 
   # flattens board by removing Space instances that contain ships
-  def return_available_spaces(board)
-
-    board.row.map |hash|
-      if hash.value.contains_ship == true
-        board = board.row.flatten.remove(hash)
+  def remove_unavailable_spaces(board)
+    board.row.each.with_index do |hash, index|
+      if hash.values[0].contains_ship == true
+        board.row.delete(hash)
       end
     end
     return board
   end
-
-
-
 end

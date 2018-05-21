@@ -1,5 +1,4 @@
 require './lib/space'
-require 'pry'
 
 class Board
   attr_reader :row
@@ -11,14 +10,13 @@ class Board
 
   # creates hashes with space instances as values
   def assign_hashes_to_board
-    4.times do
-      4.times do |index|
+      4.times.with_index do |index|
         @row << { 'A' + (index + 1).to_s => Space.new }
         @row << { 'B' + (index + 1).to_s => Space.new }
         @row << { 'C' + (index + 1).to_s => Space.new }
         @row << { 'D' + (index + 1).to_s => Space.new }
       end
-    end
+      return @row
   end
 
   def draw_board
