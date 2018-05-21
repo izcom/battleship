@@ -2,7 +2,6 @@ require './lib/board'
 require './lib/ship'
 require './lib/person'
 require './lib/computer'
-require 'pry'
 
 class Game
   def initialize
@@ -45,16 +44,33 @@ class Game
   end
 
   def place_computer_ships(ships)
+    arr = []
+    arr << return_available_spaces
     rand_int = rand(1..4)
-    binding.pry
-    ships.ship_one.starting_point =  @computer_board.row[rand_int]
-    binding.pry
-    sleep(2)
+    3.times do
+    @computer_board.ship_one.starting_point = @computer_board.row[rand_int]
+    arr << return_available_spaces
+    @computer_board.ship_two.starting_point = @computer_board.row[rand_int]
+    arr << return_available_spaces
+    @computer_board.ship_three.starting_point = @computer_board.row[rand_int]
   end
 
+  # def place_person_ships(ships)
+  #   arr = []
+  #   arr << return_available_spaces
+  # end
+
+  # flattens board by removing Space instances that contain ships
   def return_available_spaces(board)
-    # pass it a flattened board with the Space instances that contain_ships removed
-    board = board.row.flatten
+
+    board.row.map |hash|
+      if hash.value.contains_ship == true
+        board = board.row.flatten.remove(hash)
+      end
+    end
+    return board
   end
+
+
 
 end
