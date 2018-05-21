@@ -43,17 +43,8 @@ class Game
     return ships
   end
 
-  def place_computer_ships(ships)
-    arr = []
-    arr << return_available_spaces
-    rand_int = rand(1..4)
-    3.times do
-      @computer_board.ship_one.starting_point = @computer_board.row[rand_int]
-      arr << return_available_spaces
-      @computer_board.ship_two.starting_point = @computer_board.row[rand_int]
-      arr << return_available_spaces
-      @computer_board.ship_three.starting_point = @computer_board.row[rand_int]
-      end
+  def place_computer_ships(board, ships)
+    # don't forget to update @contains_ship and @ship
     end
 
   # def place_person_ships(ships)
