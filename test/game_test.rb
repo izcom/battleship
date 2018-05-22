@@ -10,19 +10,11 @@ class GameTest < Minitest::Test
     assert_instance_of Game, game
   end
 
-  def test_print_title_screen
-    game = Game.new
-    game.print_title_screen
-    expected = ''
-    # mock this in future implementation
-  end
-
   def test_remove_unavailable_spaces_method
     game = Game.new
     board = Board.new
     modded_board = board.dup
     assert_equal board.row.count, 16 # starting length
-
     board.row[0]['A1'].contains_ship = true
     modded_board = game.remove_unavailable_spaces(modded_board) # modifies length
     result = modded_board.row.count
@@ -31,7 +23,6 @@ class GameTest < Minitest::Test
   end
 
   def test_place_computer_ships
-    skip
     game = Game.new
     board = Board.new
     ship_exists = []
@@ -48,4 +39,10 @@ class GameTest < Minitest::Test
     end
     assert ship.exists = [true, true, true]
   end
+
+  # def test_place_person_ships
+  #
+  # end
+
+
 end
