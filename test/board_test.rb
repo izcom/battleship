@@ -23,16 +23,12 @@ class BoardTest < Minitest::Test
     assert_equal expected, result
   end
 
-  def test_that_ships_are_on_board
+  def test_computer_ships_are_on_board
     game = Game.new
     board = Board.new
-    game.create_ships
-    game.assign_ships
+    computer_ships = game.create_ships
+    game.place_computer_ships(board, computer_ships)
 
-    game.ships.each do |ship|
-      assert(ship.starting_point[0].between('A', 'D'))
-      assert(ship.starting_point[1].between(1, 4))
-    end
   end
 
   def test_if_ships_overlap; end

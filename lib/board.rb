@@ -11,14 +11,13 @@ class Board
 
   # creates hashes with space instances as values
   def assign_hashes_to_board
-    4.times do
-      4.times do |index|
+      4.times.with_index do |index|
         @row << { 'A' + (index + 1).to_s => Space.new }
         @row << { 'B' + (index + 1).to_s => Space.new }
         @row << { 'C' + (index + 1).to_s => Space.new }
         @row << { 'D' + (index + 1).to_s => Space.new }
       end
-    end
+      return @row
   end
 
   def draw_board
@@ -43,48 +42,44 @@ class Board
     return char_str
   end
 
-  def determine_ship_end_point(start_point)
+  def determine_ship_start_point
     possible_points = []
-    possible_points << check_above_start_point
-    possible_points << check_below_start_point
-    possible_points << check_left_of_start_point
-    possible_points << check_right_of_start_point
+  end
+
+  def determine_ship_end_point(start_point, length, board)
+    possible_points = []
+    possible_points << check_above_start_point(start_point, length, board)
+    possible_points << check_below_start_point(start_point, length, board)
+    possible_points << check_left_of_start_point(start_point, length, board)
+    possible_points << check_right_of_start_point(start_point, length, board)
     possible_points = possible_points.select { |point| point = true }
     end_point = possible_points.sample
   end
 
-  def return_end_point_distance(ship_length)
-    distance = 1
-    if ship_length == 3
-      distance = 2
-    end
-    return distance
-  end
-
-  def check_above_start_point(start_point, return_end_point_length)
-    up_char = (start_point[0].to_i - return_end_point_length).chr
+  def check_above_start_point(start_point, length, board)
+    up_char = (start_point[0].ord - (length + 1)).chr
     up_one = up_char + start_point[1].to_s
-    if up_one.includes?(64) # '@'
+    if up_char == 64 # '@'
       return false
-    elsif up_one.values.contains_ship == true
+    elsif board.row.select { |hash| hash.values == true } == 
       return false
     end
     return up_one
   end
 
-  def check_below_start_point(start_point, return_end_point_length)
-    below_char = (start_point[0].to_i + return_end_point_length).chr
+  def check_below_start_point(start_point, length, board)
+    below_char = (start_point[0].ord + (length + 1)).chr
     below_one = below_char + start_point[1].to_s
-    if below_one.includes?(69) # 'E'
+    if below_char == 69 # 'E'
       return false
     end
-    if below_one.values.contains_ship == true
+    if board.row
       return false
     end
   end
 
-  def check_left_of_start_point(start_point, return_end_point_length)
-    left_num = start_point[1] - return_end_point_length
+  def check_left_of_start_point(start_point, length, board)
+    left_num = start_point[1].to_i - length
     left_one = start_point[0] + left_num.to_s
 
     if left_num == 0 || left_num == -1
@@ -95,8 +90,8 @@ class Board
     end
   end
 
-  def check_right_of_start_point(start_point, return_end_point_length)
-    right_num = start_point[1] + return_end_point_length
+  def check_right_of_start_point(start_point, length, board)
+    right_num = start_point[1].to_i + length
     right_one = start_point[0] + right_num.to_s
 
     if right_num == 5 || right_num == 6
