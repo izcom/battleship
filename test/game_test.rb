@@ -16,7 +16,7 @@ class GameTest < Minitest::Test
     modded_board = board.dup
     assert_equal board.row.count, 16 # starting length
     board.row[0]['A1'].contains_ship = true
-    modded_board = game.remove_unavailable_spaces(modded_board) # modifies length
+    modded_board = game.remove_unavailable_spaces(modded_board)
     result = modded_board.row.count
     expected = 15
     assert_equal expected, result
@@ -27,22 +27,38 @@ class GameTest < Minitest::Test
     board = Board.new
     ship_exists = []
     ships = game.create_ships
-    game.place_computer_ships(board, ships)
-    board.row.each do |hash|
-      if hash.values[0].ship == ship_one
-        ship_exists[0] << true
-      elsif hash.values[1].ship == ship_two
-        ship_exists[1] << true
-      elsif hash.values[2].ship == ship_three
-        ship.exists[2] << true
+    length = 2
+    game.place_computer_ships(board, ships, length)
+    board.row.each do |coord|
+      if coord.values[0].ship == ships[0]
+        ship_exists << true
+      elsif coord.values[0].ship == ships[1]
+        ship_exists << true
+      elsif coord.values[0].ship == ships[2]
+        ship.exists << true
       end
     end
-    assert ship.exists = [true, true, true]
+    assert ship_exists == [true, true, true]
   end
 
-  # def test_place_person_ships
-  #
-  # end
+  def test_place_person_ships
+    skip
+    game = Game.new
+    board = Board.new
+    ship_exists = []
+    ships = game.create_ships
+    user_input = game.get_user_input
+    game.place_person_ships(board, user_input, ships)
 
-
+    board.row.each do |h|
+      if h.values[0].ship == ships[0]
+        ship_exists << true
+      elsif h.values[0].ship == ships[1]
+        ship_exists << true
+      elsif h.values[0].ship == ships[2]
+        ship.exists << true
+      end
+    end
+    assert ship_exists = [true, true, true]
+  end
 end

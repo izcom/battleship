@@ -52,53 +52,62 @@ class Board
     possible_points << check_below_start_point(start_point, length, board)
     possible_points << check_left_of_start_point(start_point, length, board)
     possible_points << check_right_of_start_point(start_point, length, board)
-    possible_points = possible_points.select { |point| point = true }
+    possible_points = possible_points.select { |point| point != false }
     end_point = possible_points.sample
   end
 
   def check_above_start_point(start_point, length, board)
-    up_char = (start_point[0].ord - (length + 1)).chr
-    up_one = up_char + start_point[1].to_s
-    if up_char == 64 # '@'
+    up_char = (start_point[0].ord - (length - 1)).chr
+    if up_char == '@'
       return false
-    elsif board.row.select { |hash| hash.values == true } == 
+    end
+    up_one = up_char + start_point[1].to_s
+    location = board.row.select { |h| h.keys[0] == up_one }
+    if location[0].values[0].contains_ship == true
       return false
     end
     return up_one
   end
 
   def check_below_start_point(start_point, length, board)
-    below_char = (start_point[0].ord + (length + 1)).chr
+    below_char = (start_point[0].ord + (length - 1)).chr
+    if below_char == 'E'
+      return false
+    end
     below_one = below_char + start_point[1].to_s
-    if below_char == 69 # 'E'
+    location = board.row.select { |h| h.keys[0] == below_one }
+
+    if location[0].values[0].contains_ship == true
       return false
     end
-    if board.row
-      return false
-    end
+    return below_one
   end
 
   def check_left_of_start_point(start_point, length, board)
     left_num = start_point[1].to_i - length
     left_one = start_point[0] + left_num.to_s
+    location = board.row.select { |h| h.keys[0] == left_one }
 
     if left_num == 0 || left_num == -1
       return false
     end
-    if left_one.values.contains_ship == true
+    if location[0].values[0].contains_ship == true
       return false
     end
+    return left_one
   end
 
   def check_right_of_start_point(start_point, length, board)
     right_num = start_point[1].to_i + length
     right_one = start_point[0] + right_num.to_s
+    location = board.row.select { |h| h.keys[0] == right_one }
 
     if right_num == 5 || right_num == 6
       return false
     end
-    if right_one.values.contains_ship == true
+    if location[0].values[0].contains_ship == true
       return false
     end
+    return right_one
   end
 end
