@@ -5,15 +5,17 @@ require './lib/computer'
 require 'pry'
 
 class Game
+  attr_reader :ships
+  
   def initialize
     @person_board = Board.new
     @computer_board = Board.new
     @person = Person.new
     @computer = Computer.new
+    @ships = create_ships
   end
 
   def start
-    ships = create_ships
     place_computer_ships(@comp_board, ships)
   end
 
@@ -34,6 +36,7 @@ class Game
   end
 
   def print_prompt_for_two_unit_ship
+    puts `clear`
     prompt = """
       I have laid out my ships on the grid. You now need to layout
       your two ships. The first is two units long and the second is
@@ -46,6 +49,7 @@ class Game
   end
 
   def print_board_squares
+
 
   end
 
@@ -84,24 +88,23 @@ class Game
       ending_coord = board.determine_ship_end_point(starting_coord, length, board)
       midpoint_coord = add_midpoint_coord(starting_coord, ending_coord)
 
-      store_ship(board, index + 1, ships, starting_coord)
-      store_ship(board, index + 1, ships, midpoint_coord)
-      store_ship(board, index + 1, ships, ending_coord)
+      store_ship_in_space(board, index + 1, ships, starting_coord)
+      if length == 3
+        store_ship_in_space(board, index + 1, ships, midpoint_coord)
       end
+      store_ship_in_space(board, index + 1, ships, ending_coord)
     end
+  end
 
   def add_midpoint_coord(starting_coord, ending_coord)
     midpoint_coord = ''
     # if ship is 3 units horizontal
     if (ending_coord[1].to_i - starting_coord[1].to_i).abs == 2
       midpoint_coord = starting_coord[0] + (starting_coord[1].to_i + 1).to_s
-      return midpoint_coord
     # if ship is 3 units vertical
     elsif (ending_coord[0].ord - starting_coord[0].ord).abs == 2
       midpoint_coord = starting_coord[0].next + starting_coord[1].to_s
-      return midpoint_coord
     end
-    return false # no midpoint
   end
 
   def store_ship_in_space(board, ship_num, ships, coord)
@@ -111,7 +114,6 @@ class Game
     key[0][coord].ship = ships[ship_num]
   end
 
-  # flattens board by removing Space instances that contain ships
   def remove_unavailable_spaces(board)
     board.row.each.with_index do |hash, index|
       if hash.values[0].contains_ship == true
@@ -119,5 +121,9 @@ class Game
       end
     end
     return board
+  end
+
+  def hit(ship)
+    ship.take_hit
   end
 end

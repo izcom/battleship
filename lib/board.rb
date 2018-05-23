@@ -7,6 +7,7 @@ class Board
   def initialize
     @row = []
     @row = assign_hashes_to_board
+    @ships = []
   end
 
   # creates hashes with space instances as values
@@ -48,15 +49,15 @@ class Board
 
   def determine_ship_end_point(start_point, length, board)
     possible_points = []
-    possible_points << check_above_start_point(start_point, length, board)
-    possible_points << check_below_start_point(start_point, length, board)
-    possible_points << check_left_of_start_point(start_point, length, board)
-    possible_points << check_right_of_start_point(start_point, length, board)
+    possible_points << check_above_start(start_point, length, board)
+    possible_points << check_below_start(start_point, length, board)
+    possible_points << check_left_of_start(start_point, length, board)
+    possible_points << check_right_of_start(start_point, length, board)
     possible_points = possible_points.select { |point| point != false }
     end_point = possible_points.sample
   end
 
-  def check_above_start_point(start_point, length, board)
+  def check_above_start(start_point, length, board)
     up_char = (start_point[0].ord - (length - 1)).chr
     if up_char == '@'
       return false
@@ -69,7 +70,7 @@ class Board
     return up_one
   end
 
-  def check_below_start_point(start_point, length, board)
+  def check_below_start(start_point, length, board)
     below_char = (start_point[0].ord + (length - 1)).chr
     if below_char == 'E'
       return false
@@ -83,7 +84,7 @@ class Board
     return below_one
   end
 
-  def check_left_of_start_point(start_point, length, board)
+  def check_left_of_start(start_point, length, board)
     left_num = start_point[1].to_i - length
     left_one = start_point[0] + left_num.to_s
     location = board.row.select { |h| h.keys[0] == left_one }
@@ -97,7 +98,7 @@ class Board
     return left_one
   end
 
-  def check_right_of_start_point(start_point, length, board)
+  def check_right_of_start(start_point, length, board)
     right_num = start_point[1].to_i + length
     right_one = start_point[0] + right_num.to_s
     location = board.row.select { |h| h.keys[0] == right_one }

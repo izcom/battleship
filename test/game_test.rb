@@ -27,28 +27,27 @@ class GameTest < Minitest::Test
     board = Board.new
     ship_exists = []
     ships = game.create_ships
-    length = 2
-    game.place_computer_ships(board, ships, length)
+    game.place_computer_ships(board, ships, 2)
     board.row.each do |coord|
-      if coord.values[0].ship == ships[0]
+
+      if coord[coord.keys[0]].ship == ships[0]
         ship_exists << true
-      elsif coord.values[0].ship == ships[1]
+      elsif coord[coord.keys[0]].ship == ships[1]
         ship_exists << true
-      elsif coord.values[0].ship == ships[2]
-        ship.exists << true
+      elsif coord[coord.keys[0]].ship == ships[2]
+        ship_exists << true
       end
     end
     assert ship_exists == [true, true, true]
   end
 
   def test_place_person_ships
-    skip
     game = Game.new
     board = Board.new
     ship_exists = []
     ships = game.create_ships
-    user_input = game.get_user_input
-    game.place_person_ships(board, user_input, ships)
+    fake_user_input = 'A1 A2'
+    game.place_person_ships(board, fake_user_input, ships)
 
     board.row.each do |h|
       if h.values[0].ship == ships[0]
@@ -66,21 +65,17 @@ class GameTest < Minitest::Test
     skip
     game = Game.new
     board = Board.new
+    game.hit(game.ships[0])
     result = game.print_board_squares
-
-    # Have to implement shoot method to display a board
-    # with hits and misses
+    ships = game.create_ships
   end
 
   def test_ship_takes_damage
     game = Game.new
     board = Board.new
     ships = game.create_ships
-    # coord = 
     assert_equal 2, ships[0].health
-    game.hit(coord, ships[0])
+    game.hit(ships[0])
     assert_equal 1, ships[0].health
-
   end
-
 end
