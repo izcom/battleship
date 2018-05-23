@@ -61,4 +61,26 @@ class GameTest < Minitest::Test
     end
     assert ship_exists = [true, true, true]
   end
+
+  def test_print_board_squares
+    skip
+    game = Game.new
+    board = Board.new
+    result = game.print_board_squares
+
+    # Have to implement shoot method to display a board
+    # with hits and misses
+  end
+
+  def test_ship_takes_damage
+    game = Game.new
+    board = Board.new
+    ships = game.create_ships
+    # coord = 
+    assert_equal 2, ships[0].health
+    game.hit(coord, ships[0])
+    assert_equal 1, ships[0].health
+
+  end
+
 end

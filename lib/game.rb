@@ -45,6 +45,10 @@ class Game
     print prompt
   end
 
+  def print_board_squares
+
+  end
+
   def place_person_ships(board, user_input, ships)
     user_input = user_input.split(' ')
     location = board.row.select { |h| h.keys[0] == user_input[0] }
@@ -100,9 +104,8 @@ class Game
     return false # no midpoint
   end
 
-  def store_ship(board, ship_num, ships, coord)
+  def store_ship_in_space(board, ship_num, ships, coord)
     key = board.row.select { |hash| hash.keys[0] == coord }
-    binding.pry
     key[0][coord].assign_ship(ship_num, ships)
     key[0][coord].contains_ship = true
     key[0][coord].ship = ships[ship_num]
