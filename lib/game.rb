@@ -5,11 +5,11 @@ require './lib/computer'
 require 'pry'
 
 class Game
-  attr_reader :ships
-  
+  attr_reader :ships, :comp_board
+
   def initialize
     @person_board = Board.new
-    @computer_board = Board.new
+    @comp_board = Board.new
     @person = Person.new
     @computer = Computer.new
     @ships = create_ships
@@ -27,11 +27,14 @@ class Game
 
   def print_instructions
     puts `clear`
-    print 'The basic Battleship rules are each player calls out one shot '\
-      "(or coordinate) each turn in attempt to hit one\nof their opponents "\
-      'ships. To “hit” one of your opponents ships, you must call out a '\
-      "letter and a number of\nwhere you think one of their ships is "\
-      "located. Ex: A3\n(Press any key to quit)"
+    prompt = """
+      The basic Battleship rules are each player calls out one shot
+      (or coordinate) each turn in attempt to hit one of their opponents
+      ships. To “hit” one of your opponents ships, you must call out a
+      letter and a number of where you think one of their ships is
+      located. Ex: A3 (Press any key to quit)
+      """
+    puts prompt
     user_input = gets.chomp
   end
 
@@ -48,14 +51,22 @@ class Game
     print prompt
   end
 
-  def print_board_squares
-
-
+  def print_board_squares(board)
+    display = []
+    board.row.each do |row|
+      display << row.display_char
+    end
+    4.times do
+      4.times do
+        print space[index] + ' '
+      end
+      puts '' # newline
+    end
   end
 
-  def place_person_ships(board, user_input, ships)
+  def place_person_ships(user_input, ships)
     user_input = user_input.split(' ')
-    location = board.row.select { |h| h.keys[0] == user_input[0] }
+    location = @person_board.rows.select { |row| h.keys[0] == user_input[0] }
 
     location[0].values[0].assign_ship(1, ships)
     location[0].values[0].contains_ship = true
@@ -80,19 +91,18 @@ class Game
     return ships
   end
 
-  def place_computer_ships(board, ships, length)
-    length.times.with_index do |index|
-      modded_board = remove_unavailable_spaces(board)
-      rand_coord = modded_board.row.sample # *
+  def place_computer_ships
+    2.times.with_index do |index|
+      mod_board = @comp_board.dup
+      rand_coord = mod_board.rows.sample # *
       starting_coord = rand_coord.keys[0]
-      ending_coord = board.determine_ship_end_point(starting_coord, length, board)
+      ending_coord = @comp_board.determine_ship_end_point(starting_coord, index + 2)
       midpoint_coord = add_midpoint_coord(starting_coord, ending_coord)
-
-      store_ship_in_space(board, index + 1, ships, starting_coord)
-      if length == 3
-        store_ship_in_space(board, index + 1, ships, midpoint_coord)
+      store_ship_in_space(@comp_board, index + 1, starting_coord)
+      if !midpoint_coord == ''
+        store_ship_in_space(@comp_board, index + 1, midpoint_coord)
       end
-      store_ship_in_space(board, index + 1, ships, ending_coord)
+      store_ship_in_space(@comp_board, index + 1, ending_coord)
     end
   end
 
@@ -107,23 +117,24 @@ class Game
     end
   end
 
-  def store_ship_in_space(board, ship_num, ships, coord)
-    key = board.row.select { |hash| hash.keys[0] == coord }
-    key[0][coord].assign_ship(ship_num, ships)
+  def store_ship_in_space(board, ship_num, coord)
+    key = board.rows.select { |hash| hash.keys[0] == coord }
+    key[0][coord].assign_ship(ship_num, @ships)
     key[0][coord].contains_ship = true
-    key[0][coord].ship = ships[ship_num]
+    key[0][coord].ship = @ships[ship_num]
   end
 
   def remove_unavailable_spaces(board)
-    board.row.each.with_index do |hash, index|
+    board.rows.each.with_index do |hash, index|
       if hash.values[0].contains_ship == true
-        board.row.delete(hash)
+        board.rows.delete(hash)
       end
     end
     return board
   end
 
-  def hit(ship)
+  def hit(board, coord, ship)
     ship.take_hit
+    board.row[coord].display_char = 'X'
   end
 end
