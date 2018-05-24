@@ -1,4 +1,6 @@
 require './lib/game'
+require './lib/user_input'
+
 game = Game.new
 game.print_title_screen
 

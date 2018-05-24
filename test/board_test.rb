@@ -12,8 +12,8 @@ class BoardTest < Minitest::Test
   def test_can_draw_board
     board = Board.new
     result = board.draw_board
-    expected = '==========='
-               '. 1 2 3 4'
+    expected = '==========='\
+               '. 1 2 3 4'\
                'A'\
                'B'\
                'C'\
@@ -28,8 +28,9 @@ class BoardTest < Minitest::Test
     board = Board.new
     computer_ships = game.create_ships
     game.place_computer_ships(board, computer_ships)
-
   end
+
+  def test_check_above_start_point_method; end
 
   def test_if_ships_overlap; end
 
